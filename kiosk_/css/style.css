@@ -1,0 +1,1535 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #111111;
+  --deep-black: #000000;
+  --text-soft: #4b4b4b;
+  --line: #d7d7d7;
+  --line-strong: #bdbdbd;
+  --bg: #f4f4f4;
+  --bg-panel: #ffffff;
+  --shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  --shadow-soft: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  color: var(--black);
+  background: linear-gradient(135deg, #f7f7f7 0%, #efefef 48%, #ffffff 100%);
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+#app {
+  width: min(100vw, 626px);
+  height: 100vh;
+  min-height: 100vh;
+  max-width: 626px;
+  overflow: hidden;
+  background: #f5f5f5;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+}
+
+.screen {
+  display: none;
+  min-height: 100%;
+  height: auto;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* 시작 화면 */
+.start-screen {
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #f7f7f7 0%, #ececec 50%, #ffffff 100%);
+}
+
+.start-screen.active {
+  display: flex;
+}
+
+.start-bg-circle {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.circle-1 {
+  width: 320px;
+  height: 320px;
+  top: -70px;
+  left: -70px;
+}
+
+.circle-2 {
+  width: 280px;
+  height: 280px;
+  right: -60px;
+  bottom: -60px;
+}
+
+.start-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 760px;
+  padding: 56px 42px;
+  text-align: center;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+}
+
+.start-logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #111111, #3a3a3a);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+.start-title {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.start-subtitle {
+  margin: 18px 0 34px;
+  font-size: 25px;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.start-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.start-btn {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 24px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--black);
+  background: linear-gradient(135deg, #ededed, #d9d9d9);
+  box-shadow: var(--shadow-soft);
+}
+
+.start-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-20deg);
+  transition: left 0.45s ease;
+}
+
+.start-btn:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+}
+
+.start-btn:hover::after {
+  left: 130%;
+}
+
+.start-btn:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.btn-icon {
+  font-size: 30px;
+}
+
+/* 공통 키오스크 */
+.kiosk-screen {
+  width: 100%;
+  height: 100vh;
+  min-height: 100%;
+  padding: 8px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f8f8f8 0%, #eeeeee 100%);
+}
+
+.kiosk-header {
+  height: 46px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 86px 1fr 82px;
+  gap: 8px;
+  align-items: center;
+}
+
+.header-home-btn {
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.header-home-btn:hover {
+  background: #f6f6f6;
+}
+
+.header-title {
+  margin: 0;
+  text-align: center;
+  font-size: 25px;
+  line-height: 1.15;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.header-cart-badge {
+  justify-self: end;
+  min-width: 76px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.kiosk-layout,
+.voice-only-layout {
+  height: calc(100vh - 54px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+.menu-section,
+.cart-section,
+.voice-only-section {
+  border-radius: 22px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.menu-section,
+.voice-only-section {
+  flex: 0 0 60%;
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-section {
+  flex: 0 0 185px;
+  height: 185px;
+  max-height: 185px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  position: static;
+  display: flex;
+  flex-direction: column;
+}
+
+.store-tabs,
+.category-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.store-tabs {
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.category-tabs {
+  gap: 0;
+  margin-bottom: 8px;
+  padding: 3px;
+  border-radius: 14px;
+  background: var(--bg);
+}
+
+.tab-btn {
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: #eeeeee;
+  color: var(--black);
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.tab-btn:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.tab-btn.active {
+  background: #111111;
+  color: #ffffff;
+}
+
+.category-tabs .tab-btn {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.category-tabs .tab-btn.active {
+  background: #ffffff;
+  color: var(--black);
+  border: 1px solid var(--line-strong);
+}
+
+.menu-grid,
+.voice-big-options.voice-menu-options {
+  flex: 0 0 auto;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  align-content: start;
+  gap: 8px;
+}
+
+.menu-card,
+.voice-menu-card {
+  height: auto;
+  min-height: 0;
+  padding: 6px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.menu-card:hover {
+  transform: translateY(-3px);
+  border-color: #8b8b8b;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
+}
+
+.menu-image-wrap,
+.voice-menu-image-wrap {
+  width: 100%;
+  aspect-ratio: 1.45 / 1;
+  height: auto;
+  flex: 0 0 auto;
+  margin-bottom: 5px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #eeeeee;
+  border: 1px solid #dddddd;
+}
+
+.menu-image,
+.voice-menu-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.menu-image-placeholder,
+.voice-menu-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.menu-name,
+.voice-menu-name {
+  min-height: 34px;
+  margin: 2px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.12;
+  font-weight: 900;
+  color: var(--black);
+  word-break: keep-all;
+}
+
+.menu-price,
+.voice-menu-price {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--black);
+}
+
+.menu-pager,
+.voice-menu-pager {
+  width: 100%;
+  margin-top: 2px;
+  padding-top: 2px;
+  grid-column  : 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.page-count {
+  font-size: 12px;
+  font-weight: 900;
+  color: #333333;
+}
+
+.pager-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-nav-btn,
+.next-menu-btn,
+.prev-menu-btn,
+.voice-next-btn,
+.voice-prev-btn {
+  width: min(13%, 160px);
+  min-height: 25px;
+  white-space: nowrap;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #111111, #333333);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+}
+
+.prev-menu-btn {
+  background: linear-gradient(135deg, #eeeeee, #dcdcdc);
+  color: #111111;
+  border: 1px solid #cccccc;
+}
+
+/* 장바구니 */
+.cart-header {
+  margin-bottom: 4px;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 2px;
+  min-height: 0;
+}
+
+.empty-cart {
+  color: #777777;
+  font-size: 15px;
+}
+
+/* 컴팩트 카트 아이템: 한 줄에 이름 + 수량 + 가격 */
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item-store {
+  display: none; /* 공간 절약을 위해 숨김 */
+}
+
+.cart-item-top {
+  display: contents; /* grid 참여용 */
+}
+
+.cart-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove-btn {
+  display: none; /* 삭제는 카트 오버레이에서 처리 */
+}
+
+.cart-item-bottom {
+  display: contents; /* grid 참여용 */
+}
+
+.item-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  white-space: nowrap;
+}
+
+.qty-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #efefef;
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.qty-num {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 16px;
+  text-align: center;
+}
+
+.qty-btn.plus {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.qty-num {
+  min-width: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.item-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--black);
+}
+
+.cart-total-wrap {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.divider {
+  border-top: 1px solid var(--line);
+  margin: 6px 0 8px;
+}
+
+.cart-total-row {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-total-label {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--black);
+}
+
+.cart-total-price {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.checkout-button {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #111111, #333333);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+.pay-buttons,
+.pay-button {
+  display: none;
+}
+
+/* 음성 키오스크 */
+.voice-wave-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.voice-wave-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 4px;
+  filter: drop-shadow(0 0 14px rgba(0, 0, 0, 0.12)) drop-shadow(0 0 28px rgba(0, 0, 0, 0.08));
+}
+
+#voiceScreen[data-step="main"] .voice-wave-wrap,
+#voiceScreen[data-step="side"] .voice-wave-wrap,
+#voiceScreen[data-step="drink"] .voice-wave-wrap {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 2px;
+}
+
+#aiWaveCanvas,
+#miniWaveCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+ .ai-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(44px, 5vw, 72px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+
+.voice-bot-row,
+#voiceScreen[data-step="main"] .voice-bot-row,
+#voiceScreen[data-step="side"] .voice-bot-row,
+#voiceScreen[data-step="drink"] .voice-bot-row {
+  display: none;
+}
+
+.voice-bot-mini-wave {
+  position: relative;
+  flex: 0 0 82px;
+  width: 82px;
+  height: 82px;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.12));
+}
+
+.voice-bubble {
+  flex: 1;
+  min-height: 78px;
+  padding: 14px 16px;
+  position: relative;
+  border-radius: 24px;
+  border: 1px solid #dedede;
+  background: #f8f8f8;
+  color: var(--black);
+  font-size: 21px;
+  line-height: 1.45;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.voice-recognition-status,
+#voiceScreen[data-step="main"] .voice-recognition-status,
+#voiceScreen[data-step="side"] .voice-recognition-status,
+#voiceScreen[data-step="drink"] .voice-recognition-status {
+  margin-top: 0;
+  text-align: center;
+  color: #555555;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.voice-stage-title {
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.voice-big-options {
+  display: grid;
+  gap: 14px;
+}
+
+.voice-option-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.voice-option-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.voice-choice-btn {
+  min-height: 92px;
+  padding: 12px 10px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, #efefef, #dddddd);
+  color: var(--black);
+  font-size: 28px;
+  font-weight: 900;
+  box-shadow: var(--shadow-soft);
+}
+
+.voice-choice-btn:hover {
+  transform: translateY(-4px);
+}
+
+.voice-choice-btn.light {
+  background: linear-gradient(135deg, #f6f6f6, #e8e8e8);
+  color: var(--black);
+}
+
+.voice-choice-btn.selected {
+  background: linear-gradient(135deg, #111111, #333333);
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.voice-order-summary {
+  flex: 0 0 auto;
+  margin-top: 8px;
+  min-height: 42px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  text-align: center;
+  color: var(--black);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 800;
+}
+
+.voice-action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.voice-action-row.large .voice-action-btn {
+  min-height: 42px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.voice-action-btn {
+  flex: 1;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.voice-action-btn.red {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.voice-action-btn.gray {
+  background: #ededed;
+  color: var(--black);
+}
+
+.flying-chip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  min-width: 220px;
+  padding: 18px 32px;
+  border-radius: 28px;
+  border: 2px solid rgba(0, 0, 0, 0.75);
+  text-align: center;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #ffffff, #ececec);
+  color: var(--black);
+  font-size: 34px;
+  font-weight: 900;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 결제 방식 선택 */
+.payment-choice-screen {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+  background: linear-gradient(135deg, #f4f4f4, #ffffff);
+}
+
+.payment-choice-screen.active {
+  display: flex;
+}
+
+.payment-choice-card {
+  width: 100%;
+  padding: 28px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.10);
+}
+
+.payment-choice-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.payment-choice-subtitle {
+  margin: 10px 0 22px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #555555;
+}
+
+.payment-method-buttons {
+  display: grid;
+  gap: 14px;
+}
+
+.payment-method-btn {
+  min-height: 72px;
+  border-radius: 18px;
+  border: 1px solid #d7d7d7;
+  background: linear-gradient(135deg, #efefef, #dddddd);
+  color: #111111;
+  font-size: 25px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.payment-back-btn {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 16px;
+  border-radius: 14px;
+  border: 1px solid #d7d7d7;
+  background: #f2f2f2;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.payment-voice-btn {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 12px;
+  border-radius: 14px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* 결제 진행/완료 */
+.payment-screen {
+  min-height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background: linear-gradient(135deg, #f4f4f4, #ffffff);
+}
+
+.payment-screen.active {
+  display: flex;
+}
+
+.payment-card {
+  width: 100%;
+  max-width: 92%;
+  padding: 38px 22px;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.10);
+}
+
+.payment-icon {
+  font-size: 56px;
+  margin-bottom: 14px;
+}
+
+#paymentMessage {
+  margin: 0 0 16px;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.countdown-text {
+  font-size: 22px;
+  color: #333333;
+}
+
+.qr-area {
+  margin: 18px 0 10px;
+  text-align: center;
+}
+
+.qr-image {
+  width: 220px;
+  height: 220px;
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.qr-text {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--black);
+}
+
+.hidden {
+  display: none;
+}
+
+.complete-title {
+  margin: 14px 0 20px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.waiting-label {
+  margin: 0;
+  font-size: 22px;
+  color: #555555;
+}
+
+.waiting-number {
+  margin: 10px 0 26px;
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--deep-black);
+}
+
+.restart-btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #111111, #323232);
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 520px) {
+  #app {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .page-nav-btn,
+  .next-menu-btn,
+  .prev-menu-btn,
+  .voice-next-btn,
+  .voice-prev-btn {
+    min-height: 50px;
+    font-size: 19px;
+  }
+
+  .menu-name,
+  .voice-menu-name {
+    min-height: 43px;
+    font-size: 19px;
+  }
+}
+
+
+
+/* ---------- 터치/음성 공통 화면 ---------- */
+#app {
+  width: min(100vw, 626px);
+  height: 100vh;
+  max-width: 626px;
+  overflow: hidden;
+}
+
+.kiosk-screen {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.kiosk-layout,
+.voice-only-layout {
+  height: calc(100vh - 54px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+/* ---------- 터치 키오스크 ---------- */
+#menuScreen .menu-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#menuScreen .cart-section {
+  display: none;
+}
+
+#menuScreen .menu-section {
+  flex: 1 1 auto;
+}
+
+#menuScreen .store-tabs,
+#menuScreen .category-tabs {
+  flex: 0 0 auto;
+}
+
+#menuScreen .menu-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  overflow: hidden;
+}
+
+#menuScreen .menu-card {
+  height: 100%;
+  min-height: 0;
+  padding: 6px;
+  overflow: hidden;
+}
+
+#menuScreen .menu-image-wrap {
+  width: 100%;
+  aspect-ratio: 1.65 / 1;
+  max-height: 140px;
+  margin-bottom: 5px;
+  flex: 0 0 auto;
+}
+
+#menuScreen .menu-name {
+  min-height: 24px;
+  margin: 0 0 3px;
+  font-size: 15px;
+  line-height: 1.15;
+  overflow: visible;
+  white-space: normal;
+}
+
+#menuScreen .menu-price {
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+#menuScreen .menu-pager {
+  flex: 0 0 42px;
+  height: 42px;
+  min-height: 42px;
+  margin-top: 5px;
+  padding-top: 0;
+  display: flex;
+  overflow: visible;
+}
+
+/* ---------- 음성 키오스크 공통 ---------- */
+#voiceScreen .voice-only-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#voiceScreen .voice-cart-side,
+#voiceScreen .cart-section {
+  flex: 0 0 145px;
+  height: 145px;
+  max-height: 145px;
+  margin-top: 0;
+  padding: 8px 10px;
+  overflow: hidden;
+}
+
+#voiceScreen .cart-items {
+  max-height: 36px;
+  min-height: 32px;
+  overflow-y: auto;
+}
+
+#voiceScreen .checkout-button {
+  min-height: 36px;
+  height: 36px;
+}
+
+#voiceScreen .voice-selection-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding-top: 0;
+}
+
+#voiceScreen .voice-order-summary,
+#voiceScreen .voice-action-row {
+  flex: 0 0 auto;
+}
+
+#voiceScreen .voice-action-row {
+  margin-top: 10px;
+}
+
+#voiceScreen .voice-action-row.large .voice-action-btn {
+  min-height: 42px;
+  font-size: 16px;
+}
+
+/* ---------- 음성 카테고리 선택 화면 ---------- */
+#voiceScreen[data-step="category"] .voice-cart-side,
+#voiceScreen[data-step="category"] .cart-section {
+  display: none;
+}
+
+#voiceScreen[data-step="category"] .voice-only-section {
+  justify-content: center;
+  align-items: center;
+}
+
+#voiceScreen[data-step="category"] .voice-wave-stage {
+  flex: 0 0 420px;
+  min-height: 420px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#voiceScreen[data-step="category"] .voice-wave-wrap {
+  width: 390px;
+  height: 390px;
+  margin: 0 auto;
+}
+
+#voiceScreen[data-step="category"] #aiWaveCanvas {
+  width: 390px;
+  height: 390px;
+}
+
+#voiceScreen[data-step="category"] .ai-text {
+  font-size: 78px;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(255, 255, 255, 0.9);
+}
+
+#voiceScreen[data-step="category"] .voice-stage-title,
+#voiceScreen[data-step="category"] .voice-big-options,
+#voiceScreen[data-step="category"] .voice-bot-row,
+#voiceScreen[data-step="category"] .voice-bot-mini-wave,
+#voiceScreen[data-step="category"] .voice-bubble,
+#voiceScreen[data-step="category"] .voice-guide-box,
+#voiceScreen[data-step="category"] .voice-guide-title,
+#voiceScreen[data-step="category"] .voice-guide-examples,
+#voiceScreen[data-step="category"] .voice-mic-guide {
+  display: none;
+}
+
+/* ---------- 음성 추천 메뉴 화면 ---------- */
+/* ---------- 음성 추천 메뉴 화면: 터치 키오스크와 동일 규격 ---------- */
+#voiceScreen[data-step="categoryMenu"] .voice-wave-stage {
+  display: none;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-only-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-selection-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-stage-title {
+  flex: 0 0 auto;
+  margin: 0 0 8px;
+  font-size: 25px;
+  line-height: 1.15;
+  text-align: center;
+  font-weight: 900;
+}
+
+/* 위쪽 음성 인식/뒤로가기 버튼 */
+#voiceScreen[data-step="categoryMenu"] .voice-listen-top-btn,
+#voiceScreen[data-step="categoryMenu"] .voice-category-back-btn {
+  flex: 0 0 42px;
+  width: 100%;
+  min-height: 42px;
+  padding: 7px;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+/* 메뉴 4개 영역: 터치 키오스크와 동일 */
+#voiceScreen[data-step="categoryMenu"] .voice-menu-options {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  overflow: hidden;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-card {
+  height: 100%;
+  min-height: 0;
+  padding: 6px;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-image-wrap {
+  width: 100%;
+  aspect-ratio: 1.65 / 1;
+  max-height: 140px;
+  flex: 0 0 auto;
+  margin-bottom: 5px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-name {
+  min-height: 24px;
+  margin: 0 0 3px;
+  font-size: 15px;
+  line-height: 1.15;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  word-break: keep-all;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-menu-price {
+  font-size: 12px;
+  line-height: 1.1;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* 음성추천 메뉴 화면 */
+#voiceScreen[data-step="categoryMenu"] .voice-menu-pager {
+  flex: 0 0 42px;
+  height: 42px;
+  min-height: 42px;
+  margin-top: 5px;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  overflow: visible;
+}
+
+#voiceScreen[data-step="categoryMenu"] .page-count {
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+#voiceScreen[data-step="categoryMenu"] .pager-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+#voiceScreen[data-step="categoryMenu"] .voice-prev-btn,
+#voiceScreen[data-step="categoryMenu"] .voice-next-btn {
+  width: 78px;
+  min-height: 28px;
+  font-size: 13px;
+  border-radius: 14px;
+}
+
+
+/* ---------- 아이패드 화면 보정 ---------- */
+@media screen and (max-width: 520px) {
+  #voiceScreen[data-step="category"] .voice-wave-stage {
+    flex-basis: 380px;
+    min-height: 380px;
+  }
+
+  #voiceScreen[data-step="category"] .voice-wave-wrap,
+  #voiceScreen[data-step="category"] #aiWaveCanvas {
+    width: 350px;
+    height: 350px;
+  }
+
+  #voiceScreen[data-step="categoryMenu"] .voice-menu-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+  #voiceScreen[data-step="categoryMenu"] .voice-menu-image-wrap {
+    height: 85px;
+    min-height: 85px;
+    max-height: 85px;
+    flex-basis: 85px;
+  }
+
+  #voiceScreen[data-step="categoryMenu"] .voice-menu-name {
+    font-size: 13px;
+  }
+
+  #voiceScreen[data-step="categoryMenu"] .voice-menu-price {
+    font-size: 11px;
+  }
+
+  #voiceScreen .voice-cart-side,
+  #voiceScreen .cart-section {
+    flex-basis: 135px;
+    height: 135px;
+    max-height: 135px;
+  }
+}
+
+/* ── 음성 키오스크 레이아웃 ── */
+#voiceScreen .voice-only-section {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 8px;
+  gap: 5px;
+}
+
+/* 메뉴 그리드가 남은 공간 모두 차지 */
+#voiceScreen .menu-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* 하단 고정 바 */
+.voice-bottom-bar {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 6px;
+  border-top: 1px solid #eee;
+}
+
+.voice-bottom-bar .voice-bubble {
+  background: #f8f8f8;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+}
+
+.voice-bottom-bar .voice-recognition-status {
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+}
+
+.voice-bottom-bar .voice-order-summary {
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+  font-weight: 700;
+}
+
+.voice-bottom-bar .voice-action-row {
+  display: flex;
+  gap: 8px;
+}
+
+.voice-bottom-bar .voice-action-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.voice-bottom-bar .voice-action-btn.red {
+  background: #111;
+  color: #fff;
+  font-size: 18px;
+}
+
+.voice-bottom-bar .voice-action-btn.gray {
+  background: #f0f0f0;
+  color: #333;
+  font-size: 14px;
+  flex: 0.6;
+}
+
+/* 🎤 말하기 버튼 - 녹음 중일 때 */
+.voice-action-btn.recording {
+  background: #dc2626 !important;
+  color: #fff !important;
+  animation: pulse-btn 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse-btn {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
+  50%       { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+}
+
+/* 음성 키오스크 메뉴 그리드 */
+#voiceScreen .store-tabs,
+#voiceScreen .category-tabs {
+  flex-shrink: 0;
+}
+
+#voiceScreen .menu-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  overflow: hidden;
+}
+
+#voiceScreen .menu-pager {
+  flex-shrink: 0;
+}
+

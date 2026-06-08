@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>푸드코트 키오스크</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <section id="startScreen" class="screen active start-screen">
+      <div class="start-bg-circle circle-1"></div>
+      <div class="start-bg-circle circle-2"></div>
+
+      <div class="start-card">
+        <div class="start-logo">🍽</div>
+        <h1 class="start-title">푸드코트 키오스크</h1>
+        <p class="start-subtitle">원하시는 주문 방식을 선택해주세요</p>
+
+        <div class="start-buttons">
+          <button class="start-btn voice-btn" id="voiceStartBtn">
+            <span class="btn-icon">🎤</span>
+            <span>음성 키오스크</span>
+          </button>
+
+          <button class="start-btn touch-btn" id="touchStartBtn">
+            <span class="btn-icon">👆</span>
+            <span>터치 키오스크</span>
+          </button>
+
+          <button class="start-btn" id="settingBtn">
+            <span class="btn-icon">⚙️</span>
+            <span>설정</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="menuScreen" class="screen kiosk-screen">
+      <header class="kiosk-header">
+        <button class="header-home-btn" id="homeBtn">⌂ 홈으로</button>
+        <h1 class="header-title">터치 키오스크</h1>
+        <div class="header-cart-badge" id="touchCartBadge" onclick="openCartOverlay('touch')" style="cursor:pointer">
+          <span>🛒</span>
+          <span id="cartCountText">0개</span>
+        </div>
+      </header>
+
+      <main class="kiosk-layout">
+        <section class="menu-section">
+          <div class="store-tabs" id="storeTabs"></div>
+          <div class="category-tabs" id="categoryTabs"></div>
+          <div class="menu-grid" id="menuGrid"></div>
+        </section>
+      </main>
+
+      <!-- DOM 참조 유지용 숨김 요소 -->
+      <div style="display:none; visibility:hidden; position:absolute;">
+        <div id="cartItems"></div>
+        <span id="totalPrice">0원</span>
+        <button id="touchCheckoutBtn"></button>
+      </div>
+    </section>
+
+    <section id="voiceScreen" class="screen kiosk-screen">
+      <header class="kiosk-header">
+        <button class="header-home-btn" id="voiceHomeBtn">⌂ 홈으로</button>
+        <h1 class="header-title">음성 키오스크</h1>
+        <div class="header-cart-badge" id="voiceCartBadge" onclick="openCartOverlay('voice')" style="cursor:pointer">
+          <span>🛒</span>
+          <span id="voiceCartCountText">0개</span>
+        </div>
+      </header>
+
+      <main class="voice-only-layout">
+        <section class="voice-only-section">
+
+          <!-- 상단: 가게탭 + 카테고리탭 -->
+          <div class="store-tabs" id="voiceStoreTabs"></div>
+          <div class="category-tabs" id="voiceCategoryTabs"></div>
+
+          <!-- 중앙: 메뉴 그리드 (공간 많이 차지) -->
+          <div class="menu-grid" id="voiceMenuGrid"></div>
+          <div id="voiceMenuPager" class="menu-pager"></div>
+
+          <!-- 하단: AI 버블 + 버튼 -->
+          <div class="voice-bottom-bar">
+            <div class="voice-bubble" id="aiBubbleText">안녕하세요! 메뉴를 선택하거나 🎤 말하기를 눌러 주문해주세요.</div>
+            <div class="voice-recognition-status" id="voiceRecognitionStatus">말하기 버튼을 누른 후 메뉴 이름을 말씀해주세요</div>
+            <div class="voice-order-summary" id="voiceOrderSummary">아직 선택한 메뉴가 없습니다.</div>
+            <div class="voice-action-row large">
+              <button type="button" class="voice-action-btn red" id="voiceListenBtn">🎤 말하기</button>
+              <button type="button" class="voice-action-btn gray" id="resetVoiceBtn">처음부터 다시</button>
+            </div>
+            <button class="checkout-button" id="voiceCheckoutBtn" style="width:100%; margin-top:8px;">결제하기</button>
+          </div>
+
+        </section>
+
+        <!-- DOM 참조 유지용 숨김 요소 -->
+        <aside style="display:none; visibility:hidden; position:absolute;">
+          <div id="voiceCartItems"></div>
+          <span id="voiceTotalPrice">0원</span>
+        </aside>
+      </main>
+    </section>
+
+    <section id="paymentChoiceScreen" class="screen payment-choice-screen">
+      <div class="payment-choice-card">
+        <h2 class="payment-choice-title">결제 방식을 선택해주세요</h2>
+        <p class="payment-choice-subtitle">버튼을 누르거나 🎤 말하기로 선택하세요</p>
+        <div class="payment-method-buttons">
+          <button class="payment-method-btn" data-method="card">💳 카드 결제</button>
+          <button class="payment-method-btn" data-method="cash">💵 현금 결제</button>
+          <button class="payment-method-btn" data-method="qr">📱 카카오페이 QR 결제</button>
+        </div>
+        <!-- 음성 키오스크용 말하기 버튼 -->
+        <button id="paymentVoiceBtn" class="payment-voice-btn" style="display:none;">
+          🎤 말하기 (카드 / 현금 / 카카오페이)
+        </button>
+        <button class="payment-back-btn" id="paymentBackBtn">← 주문 화면으로</button>
+      </div>
+    </section>
+
+    <section id="receiptScreen" class="screen payment-screen">
+      <div class="payment-card">
+        <div class="payment-icon">🧾</div>
+        <h2>주문이 완료되었습니다!</h2>
+
+        <div class="receipt-box">
+          <div class="receipt-row"><span>주문번호</span><strong id="receiptOrderNum">-</strong></div>
+          <div class="receipt-row"><span>가게</span><strong id="receiptStore">-</strong></div>
+          <div class="receipt-row"><span>결제수단</span><strong id="receiptPayment">-</strong></div>
+          <div class="divider"></div>
+          <div id="receiptItems"></div>
+          <div class="divider"></div>
+          <div class="receipt-row total"><span>합계</span><strong id="receiptTotal">-</strong></div>
+        </div>
+
+        <p class="receipt-waiting">
+          대기번호 <span id="receiptWaiting" class="waiting-number-inline">-</span> 번
+        </p>
+
+        <button class="restart-btn" id="receiptHomeBtn">처음으로</button>
+      </div>
+    </section>
+
+    <section id="paymentScreen" class="screen payment-screen">
+      <div class="payment-card">
+        <div class="payment-icon" id="paymentIcon">💳</div>
+        <h2 id="paymentMessage">결제를 진행합니다.</h2>
+
+        <div id="qrArea" class="qr-area hidden">
+          <img
+            class="qr-image"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=kakaopay-demo-payment"
+            alt="QR코드"
+          />
+          <p class="qr-text">QR코드를 인식해주세요</p>
+        </div>
+
+        <p id="countdownText" class="countdown-text"></p>
+
+        <div id="completeArea" class="complete-area hidden">
+          <p class="complete-title">결제가 완료되었습니다</p>
+          <p class="waiting-label">대기번호</p>
+          <p class="waiting-number" id="waitingNumber">000번</p>
+          <button class="restart-btn" id="restartBtn">처음으로</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 장바구니 전체화면 오버레이 -->
+  <div id="cartOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:flex-end;">
+    <div style="background:#fff; width:100%; max-height:80vh; border-radius:20px 20px 0 0; padding:20px; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:20px; font-weight:700;">🛒 장바구니</span>
+        <button onclick="closeCartOverlay()" style="font-size:24px; background:none; border:none; cursor:pointer;">✕</button>
+      </div>
+      <div id="overlayCartItems" style="margin-bottom:16px;"></div>
+      <div style="border-top:2px solid #eee; padding-top:14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span style="font-weight:700; font-size:16px;">총 금액</span>
+        <span id="overlayTotalPrice" style="font-size:22px; font-weight:800; color:#dc2626;">0원</span>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button onclick="closeCartOverlay()" style="flex:1; padding:14px; background:#f5f5f5; color:#333; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer;">닫기</button>
+        <button onclick="overlayCheckout()" style="flex:2; padding:14px; background:#dc2626; color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer;">결제하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/script.js"></script>
+</body>
+</html>
