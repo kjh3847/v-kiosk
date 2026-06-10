@@ -179,8 +179,11 @@ sudo apt update
 sudo apt install -y mysql-server
 sudo systemctl start mysql
 
-# kiosk_db 데이터베이스 생성
-sudo mysql -u root -e "CREATE DATABASE kiosk_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# kiosk_db 데이터베이스 및 테이블 생성
+sudo mysql -u root
+mysql> CREATE DATABASE kiosk_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+mysql> USE kiosk_db;
+mysql> -- business_sessions, orders, order_detail 테이블 직접 생성
 
 # Python 가상환경 및 패키지 설치
 python3 -m venv venv
@@ -188,8 +191,6 @@ source venv/bin/activate
 pip install fastapi uvicorn faster-whisper mysql-connector-python python-multipart
 sudo apt install -y ffmpeg
 ```
-
-> 테이블(business_sessions, orders, order_detail)은 서버 최초 실행 시 자동으로 생성됩니다.
 
 ### 백엔드 서버 실행
 
