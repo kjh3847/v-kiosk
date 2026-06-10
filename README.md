@@ -30,7 +30,7 @@
 | 프론트엔드 | HTML5, CSS3, JavaScript (Vanilla) |
 | 음성 출력 | Web Speech API (SpeechSynthesis) |
 | 클라우드 | AWS EC2, AWS CloudFront, AWS S3 |
-| 기타 | REST API, CORS, FormData, MediaRecorder API |
+| 기타 | MediaRecorder API |
 
 ---
 
@@ -169,7 +169,26 @@ CloudFront(HTTPS) 환경에서 EC2(HTTP) API 호출 시 브라우저가 요청�
 
 ## 실행 방법
 
-### 백엔드 서버 (AWS EC2)
+### 사전 준비 (AWS EC2)
+
+EC2 인스턴스에 아래 항목이 설치되어 있어야 합니다.
+
+```bash
+# MySQL 설치 및 실행
+sudo apt update
+sudo apt install -y mysql-server
+sudo systemctl start mysql
+
+# DB 초기화
+mysql -u root -p < voice/init_db.sql
+
+# Python 가상환경 및 패키지 설치
+python3 -m venv venv
+source venv/bin/activate
+pip install fastapi uvicorn faster-whisper mysql-connector-python ffmpeg-python
+```
+
+### 백엔드 서버 실행
 
 ```bash
 cd ~/kiosk
@@ -179,6 +198,15 @@ cd ~/kiosk
 ### 프론트엔드
 
 AWS CloudFront 또는 로컬 환경에서 `index.html` 실행
+
+---
+
+## 향후 개선 방향
+
+- **API 서버 HTTPS 적용** — Safari 등 다양한 브라우저 지원 확대
+- **Elastic IP (탄력적 IP) 적용** — EC2 재시작 시 IP가 변경되는 문제 해결 (현재 미적용)
+- **메뉴 추천 기능** — 주문 이력 데이터 분석을 통한 개인화 추천
+- **실시간 대기 번호 알림** — 주문 완료 후 대기 번호 알림 시스템 연동
 
 ---
 
