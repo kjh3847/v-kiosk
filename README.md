@@ -30,7 +30,7 @@
 | 프론트엔드 | HTML5, CSS3, JavaScript (Vanilla) |
 | 음성 출력 | Web Speech API (SpeechSynthesis) |
 | 클라우드 | AWS EC2, AWS CloudFront, AWS S3 |
-| 기타 | MediaRecorder API |
+| 기타 | MediaRecorder API, FormData, CORS |
 
 ---
 
@@ -57,37 +57,37 @@ kiosk/
 
 ## 데이터 모델
 
+### business_sessions (영업 세션)
+
+| 필드명 | 타입 | 키 | 설명 |
+|--------|------|----|------|
+| session_id | INT | PK | 영업 세션 고유번호 (AUTO INCREMENT) |
+| open_date | DATE | | 개점 날짜 |
+| status | ENUM | | open / closed |
+| total_revenue | INT | | 총 매출 |
+| total_orders | INT | | 총 주문 수 |
+
 ### orders (주문)
 
-| 필드명 | 타입 | 설명 |
-|--------|------|------|
-| order_id | INT | 주문 고유번호 (AUTO INCREMENT) |
-| order_number | INT | 고객 주문 번호 |
-| store | VARCHAR | 식당명 (한마루 / 스시로 / 만다린) |
-| payment_method | VARCHAR | 결제 수단 (카드 / 현금 / QR) |
-| total_price | INT | 총 주문 금액 |
-| ordered_at | DATETIME | 주문 시각 |
-| session_id | INT | 영업 세션 ID (FK) |
+| 필드명 | 타입 | 키 | 설명 |
+|--------|------|----|------|
+| order_id | INT | PK | 주문 고유번호 (AUTO INCREMENT) |
+| order_number | INT | | 고객 주문 번호 |
+| store | VARCHAR | | 식당명 (한마루 / 스시로 / 만다린) |
+| payment_method | VARCHAR | | 결제 수단 (카드 / 현금 / QR) |
+| total_price | INT | | 총 주문 금액 |
+| ordered_at | DATETIME | | 주문 시각 |
+| session_id | INT | FK → business_sessions | 영업 세션 ID |
 
 ### order_detail (주문 상세)
 
-| 필드명 | 타입 | 설명 |
-|--------|------|------|
-| detail_id | INT | 상세 고유번호 (AUTO INCREMENT) |
-| order_id | INT | 주문 ID (FK) |
-| menu_name | VARCHAR | 메뉴명 |
-| quantity | INT | 수량 |
-| price | INT | 단가 |
-
-### business_sessions (영업 세션)
-
-| 필드명 | 타입 | 설명 |
-|--------|------|------|
-| session_id | INT | 영업 세션 고유번호 |
-| open_date | DATE | 개점 날짜 |
-| status | ENUM | open / closed |
-| total_revenue | INT | 총 매출 |
-| total_orders | INT | 총 주문 수 |
+| 필드명 | 타입 | 키 | 설명 |
+|--------|------|----|------|
+| detail_id | INT | PK | 상세 고유번호 (AUTO INCREMENT) |
+| order_id | INT | FK → orders | 주문 ID |
+| menu_name | VARCHAR | | 메뉴명 |
+| quantity | INT | | 수량 |
+| price | INT | | 단가 |
 
 ---
 
@@ -179,14 +179,17 @@ sudo apt update
 sudo apt install -y mysql-server
 sudo systemctl start mysql
 
-# DB 초기화
-mysql -u root -p < voice/init_db.sql
+# kiosk_db 데이터베이스 생성
+sudo mysql -u root -e "CREATE DATABASE kiosk_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Python 가상환경 및 패키지 설치
 python3 -m venv venv
 source venv/bin/activate
-pip install fastapi uvicorn faster-whisper mysql-connector-python ffmpeg-python
+pip install fastapi uvicorn faster-whisper mysql-connector-python python-multipart
+sudo apt install -y ffmpeg
 ```
+
+> 테이블(business_sessions, orders, order_detail)은 서버 최초 실행 시 자동으로 생성됩니다.
 
 ### 백엔드 서버 실행
 
